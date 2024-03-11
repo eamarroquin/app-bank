@@ -1,0 +1,62 @@
+<div class="container-fluid h-100">
+  <div class="row h-100">
+
+    <!-- LISTA DE CUENTAS -->
+    <div class="panel col-md-4 bg-light overflow-auto">
+      <h6>Cuentas bancarias</h6>
+      <div *ngIf="listaCuentas && listaCuentas.length > 0">
+        <div *ngFor="let cuenta of listaCuentas" class="card cuenta-card mb-2" (click)="mostrarMovimientos(cuenta)">
+          <div class="card-body">
+            <div class="mb-3">
+              <span class="card-title">{{ cuenta.numeroCuenta | slice:-15 }}</span>
+              <p class="card-text">{{ cuenta.tipoCuenta }}</p>
+            </div>
+
+            <div class="mb-3">
+              <span class="card-title">{{ cuenta.saldo | currency:'USD':'symbol':'1.2-2' }}</span>
+              <p class="card-text">Saldo disponible</p>
+            </div>
+
+            <div class="button-container">
+              <button type="button" class="btn btn-secondary w-100"
+                (click)="redireccionarCrearTransaccion($event, cuenta)">Transacción</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <button type="button" class="btn btn-success w-100 mb-2" (click)="redireccionarCrearCuenta()">Añadir
+        cuenta</button>
+    </div>
+
+    <!-- LISTA DE CUENTAS -->
+    <div class="panel col-md-7 overflow-auto">
+      <h6>Movimientos</h6>
+      <div *ngIf="listaMovimientos && listaMovimientos.length > 0">
+        <div *ngFor="let movimiento of listaMovimientos" class="card cuenta-card mb-3">
+          <div class="card-body">
+            <div class="mb-3">
+              <span class="card-title">{{ movimiento.fechaCreacion | date: 'medium' }}</span>
+              <p class="card-text">{{ movimiento.tipoMovimiento }}</p>
+            </div>
+
+            <div class="mb-3">
+              <span class="card-title"
+                [ngClass]="{'text-success': movimiento.tipoMovimiento === 'Consignación', 'text-danger': movimiento.tipoMovimiento === 'Retiro'}">{{
+                movimiento.valor | currency:'USD':'symbol':'1.2-2' }}</span>
+              <p class="card-text">Valor transacción</p>
+            </div>
+
+            <div class="mb-3">
+              <span class="card-title">Observación</span>
+              <p class="card-text">{{ movimiento.observacion }}</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary w-100 mb-2" (click)="redireccionarInformes()">Generar
+        extracto</button>
+    </div>
+  </div>
+</div>

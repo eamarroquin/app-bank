@@ -1,0 +1,33 @@
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title text-center">¡Nueva cuenta BlueSoft!</h2>
+
+        <form>
+          <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo de cuenta</label>
+            <select class="form-select" id="tipo" [(ngModel)]="cuenta.idTipoCuenta" name="tipo" required>
+              <option *ngFor="let tipo of listaTipos" [value]="tipo.id">{{ tipo.descripcion }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="saldo" class="form-label">Saldo inicial</label>
+            <input type="number" class="form-control" id="saldo" name="saldo" [(ngModel)]="cuenta.saldo" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="ciudad" class="form-label">Ciudad</label>
+            <select class="form-select" id="ciudad" [(ngModel)]="cuenta.idCiudad" name="ciudad" required>
+              <option *ngFor="let ciudad of listaCiudades" [value]="ciudad.id">{{ ciudad.descripcion }}</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" (click)="crearCuenta()">Crear cuenta</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+.bg-light {
+  background-color: #f8f9fa;
+}
+
+.panel {
+  height: 94%;
+  overflow-y: auto;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  margin: 20px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.cuenta-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.cuenta-card:hover {
+  background-color: #f0f0f0;
+}
+
+.card-title {
+  font-weight: bold;
+}

@@ -1,0 +1,39 @@
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title text-center">Transacción...</h2>
+
+        <form>
+          <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo de movimiento</label>
+            <select class="form-select" id="tipo" [(ngModel)]="movimiento.idTipoMovimiento" name="tipo" required>
+              <option *ngFor="let tipo of listaTipos" [value]="tipo.id">{{ tipo.descripcion }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="valor" class="form-label">Valor transacción</label>
+            <input type="number" class="form-control" id="valor" name="valor" [(ngModel)]="movimiento.valor" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="ciudad" class="form-label">Ciudad</label>
+            <select class="form-select" id="ciudad" [(ngModel)]="movimiento.idCiudad" name="ciudad" required>
+              <option *ngFor="let ciudad of listaCiudades" [value]="ciudad.id">{{ ciudad.descripcion }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="observacion" class="form-label">Observación</label>
+            <input type="text" class="form-control" id="observacion" name="observacion"
+              [(ngModel)]="movimiento.observacion">
+          </div>
+
+          <button type="submit" class="btn btn-success w-100" (click)="realizarTransaccion()">Confirmar</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
