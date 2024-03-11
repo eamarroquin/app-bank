@@ -4,7 +4,7 @@
       <div class="card-body">
         <h2 class="card-title text-center">¡Nueva cuenta BlueSoft!</h2>
 
-        <form>
+        <form #cuentaForm="ngForm" (ngSubmit)="crearCuenta()" novalidate>
           <div class="mb-3">
             <label for="tipo" class="form-label">Tipo de cuenta</label>
             <select class="form-select" id="tipo" [(ngModel)]="cuenta.idTipoCuenta" name="tipo" required>
@@ -14,7 +14,8 @@
 
           <div class="mb-3">
             <label for="saldo" class="form-label">Saldo inicial</label>
-            <input type="number" class="form-control" id="saldo" name="saldo" [(ngModel)]="cuenta.saldo" required>
+            <input type="number" class="form-control" id="saldo" name="saldo" [(ngModel)]="cuenta.saldo" required
+              min="0">
           </div>
 
           <div class="mb-3">
@@ -24,7 +25,7 @@
             </select>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100" (click)="crearCuenta()">Crear cuenta</button>
+          <button type="submit" class="btn btn-primary w-100" [disabled]="!cuentaForm.form.valid">Crear cuenta</button>
         </form>
 
       </div>

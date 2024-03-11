@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError, of, tap } from 'rxjs';
 import { ClienteDTO } from 'src/app/models/cliente.model';
 import { CuentaDTO } from 'src/app/models/cuenta.model';
 import { MovimientoDTO } from 'src/app/models/movimiento.model';
+import { CuentaService } from 'src/app/services/cuenta.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { MovimientoService } from 'src/app/services/movimiento.service';
 import { SharedService } from 'src/app/services/shared.service';
 @Component({
   selector: 'app-caja',
@@ -18,77 +22,80 @@ export class CajaComponent implements OnInit {
 
   cuentaSeleccionada: CuentaDTO = {};
 
-  constructor(private sharedService: SharedService, private router: Router) {}
-
-  // ----------------------------------------------------------------
+  constructor(
+    private cuentaService: CuentaService,
+    private movimientoService: MovimientoService,
+    private localStorage: LocalStorageService,
+    private sharedService: SharedService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.generarCuentasDeEjemplo();
+    const cliente = this.localStorage.getCliente();
 
-    for (let i = 0; i < 2; i++) {
-      const movimiento = this.generarMovimiento();
-      this.listaMovimientos.push(movimiento);
+    if (cliente !== null) {
+      this.cliente = cliente;
+    } else {
+      alert(
+        'Upps! Parece que no hay un usuario en sesión.'
+      );
+      this.router.navigate(['auth/login']);
     }
 
-    this.cliente.id = 12;
+    this.cargarCuentas(this.cliente.id!);
+    this.listaMovimientos = [];
+    this.cuentaSeleccionada = {};
   }
 
-  generarCuentasDeEjemplo() {
-    for (let i = 1; i <= 1; i++) {
-      const cuenta: CuentaDTO = {
-        id: i,
-        numeroCuenta: '3123232132312321' + i,
-        idTipoCuenta: '1',
-        tipoCuenta: 'Cuenta Corriente',
-        saldo: 1000.0 * i,
-        idCliente: 1,
-        idCiudad: 1,
-        descCiudad: 'Ciudad Ejemplo',
-      };
-
-      this.listaCuentas.push(cuenta);
-    }
+  cargarCuentas(id: number) {
+    this.cuentaService
+      .obtenerCuentasByCliente(this.cliente.id!)
+      .pipe(
+        tap((data) => {
+          if (data) {
+            this.listaCuentas = data;
+          }
+        }),
+        catchError((error) => {
+          if (error && error.error) {
+            alert(error.error);
+          } else {
+            alert(
+              'Se produjo un error al cargar las cuentas del cliente. Por favor, inténtelo de nuevo.'
+            );
+          }
+          return of(null);
+        })
+      )
+      .subscribe();
   }
-
-  generarFechaAleatoria(): string {
-    const fecha = new Date();
-    fecha.setFullYear(fecha.getFullYear() - Math.floor(Math.random() * 5));
-    fecha.setMonth(Math.floor(Math.random() * 12));
-    fecha.setDate(Math.floor(Math.random() * 28) + 1);
-    return fecha.toISOString();
-  }
-
-  generarObservacionAleatoria(): string {
-    const observaciones = [
-      'Compra en línea',
-      'Retiro de efectivo',
-      'Depósito',
-      'Transferencia',
-      'Pago de factura',
-    ];
-    return observaciones[Math.floor(Math.random() * observaciones.length)];
-  }
-
-  generarMovimiento(): MovimientoDTO {
-    return {
-      id: Math.floor(Math.random() * 1000) + 1,
-      idCuenta: Math.floor(Math.random() * 100) + 1,
-      idTipoMovimiento: Math.floor(Math.random() * 5) + 1,
-      tipoMovimiento: Math.random() > 0.5 ? 'Consignación' : 'Retiro',
-      fechaCreacion: this.generarFechaAleatoria(),
-      valor: Math.random() * 1000,
-      observacion: this.generarObservacionAleatoria(),
-      idCiudad: Math.floor(Math.random() * 10) + 1,
-      descCiudad: `Ciudad ${Math.floor(Math.random() * 5) + 1}`,
-    };
-  }
-
-  // ----------------------------------------------------------------
 
   mostrarMovimientos(cuenta: CuentaDTO) {
+    this.listaMovimientos = [];
+
     this.cuentaSeleccionada = cuenta;
     this.sharedService.setIdCuenta(this.cuentaSeleccionada.id!);
-    alert(`Cuenta seleccionada: ${cuenta.numeroCuenta}`);
+
+    this.movimientoService
+      .obtenerMovimientosByCuenta(this.cuentaSeleccionada.id!)
+      .pipe(
+        tap((data) => {
+          if (data) {
+            this.listaMovimientos = data;
+          }
+        }),
+        catchError((error) => {
+          if (error && error.error) {
+            alert(error.error);
+          } else {
+            alert(
+              'Se produjo un error al cargar movimientos de la cuenta. Por favor, inténtelo de nuevo.'
+            );
+          }
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 
   redireccionarCrearCuenta() {
@@ -104,5 +111,10 @@ export class CajaComponent implements OnInit {
 
   redireccionarInformes() {
     this.router.navigate(['banco/informes']);
+  }
+
+  cerrarSesion() {
+    this.localStorage.removerInfo();
+    this.router.navigateByUrl('/auth/login');
   }
 }

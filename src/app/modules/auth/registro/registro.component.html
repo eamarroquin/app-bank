@@ -4,28 +4,32 @@
       <div class="card-body">
         <h2 class="card-title text-center">¡Haz parte de BlueSoft Bank!</h2>
 
-        <form>
+        <form #registrarForm="ngForm" (ngSubmit)="registrar()" novalidate>
           <div class="mb-3">
             <label for="dni" class="form-label">Número de identificación</label>
-            <input type="text" class="form-control" id="dni" placeholder="Ingrese su DNI" required>
+            <input type="text" class="form-control" id="dni" name="dni" [(ngModel)]="nuevoCliente.dni" required>
           </div>
 
           <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre completo" required>
+            <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="nuevoCliente.nombre"
+              placeholder="Nombre completo" required>
           </div>
 
           <div class="mb-3">
             <label for="clave" class="form-label">Clave de acceso</label>
-            <input type="password" class="form-control" id="clave" placeholder="Ingrese su contraseña" required>
+            <input type="password" class="form-control" id="clave" name="clave" [(ngModel)]="nuevoCliente.password"
+              required>
           </div>
 
           <div class="mb-3">
             <label for="confirmar-clave" class="form-label">Confirmar contraseña</label>
-            <input type="password" class="form-control" id="confirmar-clave" placeholder="Ingrese nuevamente la contraseña" required>
+            <input type="password" class="form-control" id="confirmar-clave" name="confirmar-clave"
+              [(ngModel)]="confirmarPassword" required>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100">Registrarme</button>
+          <button type="submit" class="btn btn-primary w-100"
+            [disabled]="!registrarForm.form.valid">Registrarme</button>
         </form>
 
       </div>
