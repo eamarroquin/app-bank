@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, of, tap } from 'rxjs';
 import { CiudadDTO } from 'src/app/models/ciudad.model';
 import { CuentaDTO } from 'src/app/models/cuenta.model';
 import { TipoCuentaDTO } from 'src/app/models/tipo-cuenta.model';
+import { CuentaService } from 'src/app/services/cuenta.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -11,30 +14,92 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./crear-cuenta.component.scss'],
 })
 export class CrearCuentaComponent implements OnInit {
-  listaTipos: TipoCuentaDTO[] = [
-    { id: 1, descripcion: 'CUENTA DE AHORRO' },
-    { id: 2, descripcion: 'CUENTA CORRIENTE' },
-  ];
+  listaTipos: TipoCuentaDTO[] = [];
 
-  listaCiudades: CiudadDTO[] = [
-    { id: 1, descripcion: 'BUGA' },
-    { id: 2, descripcion: 'CALI' },
-  ];
+  listaCiudades: CiudadDTO[] = [];
 
   cuenta: CuentaDTO = {};
 
-  constructor(private sharedService: SharedService, private router: Router) {}
+  constructor(
+    private cuentaService: CuentaService,
+    private generalService: GeneralService,
+    private sharedService: SharedService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.sharedService
       .getIdCliente()
       .subscribe((id) => (this.cuenta.idCliente = id));
 
-    alert(this.cuenta.idCliente);
+      if (!this.cuenta.idCliente) {
+        alert('Upps! Parece que no hay un usuario en sesión.');
+        this.router.navigate(['auth/login']);
+      }
+
+    this.cargarTipos();
+    this.cargarCiudades();
+  }
+
+  cargarCiudades() {
+    this.generalService
+      .obtenerCiudades()
+      .pipe(
+        tap((data) => {
+          if (data) {
+            this.listaCiudades = data;
+          }
+        }),
+        catchError((error) => {
+          if (error && error.error) {
+            alert(error.error);
+          } else {
+            alert('Se produjo un error al cargar ciudades. Por favor, inténtelo de nuevo.');
+          }
+          return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  cargarTipos() {
+    this.generalService
+      .obtenerTiposCuenta()
+      .pipe(
+        tap((data) => {
+          if (data) {
+            this.listaTipos = data;
+          }
+        }),
+        catchError((error) => {
+          if (error && error.error) {
+            alert(error.error);
+          } else {
+            alert('Se produjo un error al cargar tipos de cuenta. Por favor, inténtelo de nuevo.');
+          }
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 
   crearCuenta() {
-    alert('Crear cuenta');
-    this.router.navigate(['banco']);
+    this.cuentaService
+      .registarCuenta(this.cuenta.idCliente!, this.cuenta)
+      .pipe(
+        tap((data) => {
+          alert('¡Cuenta creada con éxito!. Número de cuenta:' + data.numeroCuenta);
+          this.router.navigateByUrl('/banco');
+        }),
+        catchError((error) => {
+          if (error && error.error) {
+            alert(error.error);
+          } else {
+            alert('Se produjo un error al ergistar cuenta. Por favor, inténtelo de nuevo.');
+          }
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 }

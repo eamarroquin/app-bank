@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegistroComponent } from './registro/registro.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import { RegistroComponent } from './registro/registro.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild([
       { path: 'login', component: LoginComponent },
       { path: 'registro', component: RegistroComponent }

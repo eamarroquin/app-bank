@@ -4,7 +4,7 @@
       <div class="card-body">
         <h2 class="card-title text-center">Transacción...</h2>
 
-        <form>
+        <form #transaccionForm="ngForm" (ngSubmit)="realizarTransaccion()" novalidate>
           <div class="mb-3">
             <label for="tipo" class="form-label">Tipo de movimiento</label>
             <select class="form-select" id="tipo" [(ngModel)]="movimiento.idTipoMovimiento" name="tipo" required>
@@ -14,7 +14,8 @@
 
           <div class="mb-3">
             <label for="valor" class="form-label">Valor transacción</label>
-            <input type="number" class="form-control" id="valor" name="valor" [(ngModel)]="movimiento.valor" required>
+            <input type="number" class="form-control" id="valor" name="valor" [(ngModel)]="movimiento.valor" required
+              min="0">
           </div>
 
           <div class="mb-3">
@@ -30,7 +31,7 @@
               [(ngModel)]="movimiento.observacion">
           </div>
 
-          <button type="submit" class="btn btn-success w-100" (click)="realizarTransaccion()">Confirmar</button>
+          <button type="submit" class="btn btn-success w-100"  [disabled]="!transaccionForm.form.valid">Confirmar</button>
         </form>
 
       </div>
