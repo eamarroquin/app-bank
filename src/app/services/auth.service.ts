@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private static BASE_URL = environment.API_STREAMING + "/auth/";
+  private static BASE_URL = environment.API_BANK + "/auth/";
 
   private static SIGN_IN = AuthService.BASE_URL + 'sign-in';
   private static SIGN_UP = AuthService.BASE_URL + 'sign-up';

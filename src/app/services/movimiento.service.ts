@@ -9,7 +9,7 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root',
 })
 export class MovimientoService {
-  private static BASE_URL = environment.API_STREAMING + '/banco/';
+  private static BASE_URL = environment.API_BANK + '/banco/';
 
   private static GET_MOVIMIENTOS =
     MovimientoService.BASE_URL + 'cuenta/{idCuenta}/movimientos';

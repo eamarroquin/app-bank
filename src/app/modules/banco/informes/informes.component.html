@@ -1,1 +1,113 @@
-<p>informes works!</p>
+<div class="container-fluid p-4">
+
+  <!-- INFORME EXTRACTOS -->
+  <div class="container-fluid w-100 m-4 p-4 bg-light">
+    <div class="mb-3">
+      <label for="mes-extracto" class="form-label">Mes:</label>
+      <select class="form-select" id="mes-extracto" [(ngModel)]="mes" name="mes-extracto" required>
+        <option *ngFor="let mes of listaMeses" [value]="mes.id">{{ mes.descripcion }}</option>
+      </select>
+      <label for="year-extracto" class="form-label">Año:</label>
+      <input type="number" class="form-control" id="year-extracto" name="year-extracto" [(ngModel)]="year" required
+        min="1900" max="2024">
+
+      <button type="button" class="btn btn-primary mt-4 mb-4" (click)="generarExtracto()">Generar extracto</button>
+
+      <table class="table table-sm">
+        <caption>Lista de movimientos de la cuenta</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Ciudad</th>
+            <th scope="col">Observación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let movimiento of listaExtractos">
+            <th scope="row">{{ movimiento.id }}</th>
+            <td>{{ movimiento.tipoMovimiento }}</td>
+            <td>{{ movimiento.fechaCreacion | date: 'short' }}</td>
+            <td>{{ movimiento.valor | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>{{ movimiento.descCiudad }}</td>
+            <td>{{ movimiento.observacion }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- INFORME TRANSACCIONES -->
+  <div class="container-fluid w-100 m-4 p-4 bg-light">
+    <div class="mb-3">
+      <label for="mes-transaccion" class="form-label">Mes:</label>
+      <select class="form-select" id="mes-transaccion" [(ngModel)]="mes" name="mes-transaccion" required>
+        <option *ngFor="let mes of listaMeses" [value]="mes.id">{{ mes.descripcion }}</option>
+      </select>
+      <label for="year-transaccion" class="form-label">Año:</label>
+      <input type="number" class="form-control" id="year-transaccion" name="year-transaccion" [(ngModel)]="year"
+        required min="1900" max="2024">
+
+      <button type="button" class="btn btn-primary mt-4 mb-4" (click)="generarInformeTransacciones()">Generar informe
+        transacciones</button>
+
+      <table class="table table-sm">
+        <caption>Lista de clientes y su actividad transaccional</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Cantidad transacciones</th>
+            <th scope="col">Valor transacciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaccion of listaInformeTransacciones">
+            <th scope="row">{{ transaccion.id }}</th>
+            <td>{{ transaccion.dni }}</td>
+            <td>{{ transaccion.nombre }}</td>
+            <td>{{ transaccion.cantidadTransacciones }}</td>
+            <td>{{ transaccion.valorTransacciones | currency:'USD':'symbol':'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- INFORME RETIROS -->
+  <div class="container-fluid w-100 m-4 p-4 bg-light">
+    <div class="mb-3">
+
+      <button type="button" class="btn btn-primary mt-4 mb-4" (click)="generarInformeRetiros()">Generar informe</button>
+
+      <table class="table table-sm">
+        <caption>Clientes con transacciones fuera de su ciudad de registro y valor total superior a $1'000.000</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Cantidad transacciones</th>
+            <th scope="col">Valor transacciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaccion of listaInformeRetiros">
+            <th scope="row">{{ transaccion.id }}</th>
+            <td>{{ transaccion.dni }}</td>
+            <td>{{ transaccion.nombre }}</td>
+            <td>{{ transaccion.cantidadTransacciones }}</td>
+            <td>{{ transaccion.valorTransacciones | currency:'USD':'symbol':'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>

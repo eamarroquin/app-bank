@@ -9,7 +9,7 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root',
 })
 export class CuentaService {
-  private static BASE_URL = environment.API_STREAMING + '/banco/';
+  private static BASE_URL = environment.API_BANK + '/banco/';
 
   private static GET_CUENTAS =
     CuentaService.BASE_URL + 'cliente/{idCliente}/cuenta';

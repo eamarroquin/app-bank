@@ -42,7 +42,11 @@ export class RegistroComponent implements OnInit {
             this.nuevoCliente = {};
           }),
           catchError((error) => {
-            alert('Error al registrar usuario: ' + error);
+            if (error && error.error) {
+              alert(error.error);
+            } else {
+              alert('Se produjo un error al registrar usuario. Por favor, inténtelo de nuevo.');
+            }
             this.nuevoCliente = {};
             return of(null);
           })

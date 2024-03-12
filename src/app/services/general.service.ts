@@ -11,7 +11,7 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root',
 })
 export class GeneralService {
-  private static BASE_URL = environment.API_STREAMING;
+  private static BASE_URL = environment.API_BANK;
 
   private static GET_CIUDADES = GeneralService.BASE_URL + '/ciudad';
 
