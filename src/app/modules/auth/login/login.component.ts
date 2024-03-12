@@ -39,7 +39,11 @@ export class LoginComponent implements OnInit {
           this.data = {};
         }),
         catchError((error) => {
-          alert('Error al iniciar sesión: ' + error);
+          if (error && error.error) {
+            alert(error.error);
+          } else {
+            alert('Se produjo un error al iniciar sesión. Por favor, inténtelo de nuevo.');
+          }
           this.data = {};
           return of(null);
         })
